@@ -98,10 +98,10 @@ jobs:
           name: Proxmox VE ${{ needs.check-version.outputs.version }} Automated Installation Image
           body: |
             ## 🚀 Build Complete
-            - **基础镜像**: `${{ needs.check-version.outputs.latest_iso }}`
-            - **网络模式**: `${{ steps.read_toml.outputs.addr }}`
-            - **默认密码**: `${{ steps.read_toml.outputs.root_pwd }}`
-            - **磁盘配置**: 512G 适配 (MaxRoot: 60G, No LVM-Thin)
+            - **Base Image**: `${{ needs.check-version.outputs.latest_iso }}`
+            - **Network Mode**: `${{ steps.read_toml.outputs.addr }}`
+            - **Default Password**: `${{ steps.read_toml.outputs.root_pwd }}`
+            - **Disk Config**: 512G (MaxRoot: 60G, No LVM-Thin)
           files: /tmp/pve-iso/${{ env.FINAL_NAME }}
           draft: false
           prerelease: false
