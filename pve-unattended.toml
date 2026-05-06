@@ -7,11 +7,13 @@ timezone = "America/Santiago"      # ✅ Tu zona horaria
 root_password = "Pve@2025!!"
 
 [network]
-filter = "nic0"
 source = "from-answer"             # ✅ IP estática (no DHCP)
 cidr = "192.168.1.134/24"       # ✅ Tu IP/máscara
 gateway = "192.168.1.1"            # ✅ Tu gateway
 dns = "1.1.1.1"                  # ✅ Tu DNS
+
+[network.filter]
+type = "nic0"
 
 [disk-setup]
 filesystem = "ext4"                # ✅ Tu sistema de archivos
