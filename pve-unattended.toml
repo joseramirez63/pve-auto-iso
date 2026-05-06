@@ -10,10 +10,10 @@ root_password = "Pve@2025!!"
 source = "from-answer"             # ✅ IP estática (no DHCP)
 cidr = "192.168.1.134/24"       # ✅ Tu IP/máscara
 gateway = "192.168.1.1"            # ✅ Tu gateway
-dns = ["1.1.1.1"]                  # ✅ Tu DNS
+dns = "1.1.1.1"                  # ✅ Tu DNS
 
 [disk-setup]
 filesystem = "ext4"                # ✅ Tu sistema de archivos
-disk_list = ["nvme0n1"]            # ✅ Tu disco NVMe
+disk_list = "nvme0n1"           # ✅ Tu disco NVMe
 lvm.maxroot = 60
 lvm.swapsize = 2
