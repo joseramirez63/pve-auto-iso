@@ -7,6 +7,7 @@ timezone = "America/Santiago"      # ✅ Tu zona horaria
 root_password = "Pve@2025!!"
 
 [network]
+filter = "nic0"
 source = "from-answer"             # ✅ IP estática (no DHCP)
 cidr = "192.168.1.134/24"       # ✅ Tu IP/máscara
 gateway = "192.168.1.1"            # ✅ Tu gateway
