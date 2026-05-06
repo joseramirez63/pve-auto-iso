@@ -17,6 +17,6 @@ type = "nic0"
 
 [disk-setup]
 filesystem = "ext4"                # ✅ Tu sistema de archivos
-disk_list = "nvme0n1"           # ✅ Tu disco NVMe
+disk_list = ["nvme0n1"]           # ✅ Tu disco NVMe
 lvm.maxroot = 60
 lvm.swapsize = 2
