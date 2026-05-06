@@ -1,4 +1,4 @@
-name: 构建最新版 PVE 无人值守安装 ISO
+name: Build Latest PVE Unattended Installation ISO
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
       latest_iso: ${{ steps.get_iso.outputs.latest_iso }}
       version: ${{ steps.get_iso.outputs.version }}
     steps:
-      - name: 获取官网最新 ISO 版本
+      - name: Get latest ISO version from official site
         id: get_iso
         run: |
           ISO_LIST=$(curl -s https://enterprise.proxmox.com/iso/ | grep -o 'proxmox-ve_[0-9.]*-[0-9]*.iso' | sort -Vr)
@@ -22,7 +22,7 @@ jobs:
           echo "latest_iso=$LATEST_ISO" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: 检查仓库已发布版本
+      - name: Check already released versions
         id: version_check
         run: |
           LATEST_RELEASE=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | grep 'tag_name' | cut -d'"' -f4 | sed 's/^v//; s/-.*//' || echo "0.0-0")
@@ -39,17 +39,17 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: 拉取仓库代码
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 安装构建依赖
+      - name: Install build dependencies
         run: |
           curl -fsSL https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg
           echo "deb [signed-by=/etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg] http://download.proxmox.com/debian/pve bookworm pve-no-subscription" | sudo tee /etc/apt/sources.list.d/pve.list
           sudo apt update -y
           sudo apt install -y proxmox-auto-install-assistant mtools libisoburn1 wget
 
-      - name: 读取 TOML 配置
+      - name: Read TOML configuration
         id: read_toml
         run: |
           extract_val() { grep "$1" pve-unattended.toml | sed -E 's/.*=[[:space:]]*"(.*)"/\1/' | tr -d '\r'; }
@@ -57,22 +57,22 @@ jobs:
           NET_MODE=$(extract_val "source")
           if [ "$NET_MODE" = "from-answer" ]; then
             IP=$(extract_val "cidr")
-            ADDR="静态IP: $IP"
+            ADDR="Static IP: $IP"
           else
-            ADDR="DHCP 自动获取"
+            ADDR="DHCP (automatic)"
           fi
           echo "root_pwd=$ROOT_PWD" >> $GITHUB_OUTPUT
           echo "addr=$ADDR" >> $GITHUB_OUTPUT
 
-      - name: 下载 PVE 原版 ISO
+      - name: Download original PVE ISO
         run: |
           mkdir -p /tmp/pve-iso
           wget --tries=3 --timeout=300 -O /tmp/pve-iso/pve-original.iso https://enterprise.proxmox.com/iso/${{ needs.check-version.outputs.latest_iso }}
 
-      - name: 制作无人值守 ISO
+      - name: Build unattended ISO
         run: |
           WORKING_DIR="/tmp/pve-iso"
-          # 强制指定输出文件名，不再让工具随心所欲
+          # Force output filename
           OUTPUT_PATH="$WORKING_DIR/pve-final-output.iso"
           
           sudo proxmox-auto-install-assistant prepare-iso $WORKING_DIR/pve-original.iso \
@@ -81,7 +81,7 @@ jobs:
             --output $OUTPUT_PATH
           
           if [ ! -f "$OUTPUT_PATH" ]; then
-            echo "FATAL: 生成文件失败，启动目录深度扫描："
+            echo "FATAL: Failed to generate ISO file, scanning directories:"
             ls -R /tmp
             exit 1
           fi
@@ -91,13 +91,13 @@ jobs:
           mv "$OUTPUT_PATH" "$WORKING_DIR/$FINAL_NAME"
           echo "FINAL_NAME=$FINAL_NAME" >> $GITHUB_ENV
 
-      - name: 发布 Release
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.check-version.outputs.version }}-${{ github.run_number }}
-          name: Proxmox VE ${{ needs.check-version.outputs.version }} 自动化安装镜像
+          name: Proxmox VE ${{ needs.check-version.outputs.version }} Automated Installation Image
           body: |
-            ## 🚀 构建完成
+            ## 🚀 Build Complete
             - **基础镜像**: `${{ needs.check-version.outputs.latest_iso }}`
             - **网络模式**: `${{ steps.read_toml.outputs.addr }}`
             - **默认密码**: `${{ steps.read_toml.outputs.root_pwd }}`
