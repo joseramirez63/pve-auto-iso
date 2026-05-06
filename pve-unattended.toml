@@ -1,23 +1,20 @@
+name=pve-unattended.toml url=https://github.com/xonec/pve-auto-iso/blob/main/pve-unattended.toml
 [global]
-keyboard = "en-us"
-country = "cn"
-fqdn = "pve.test.local"
-mailto = "root@localhost"
-timezone = "Asia/Shanghai"
+keyboard = "es"                    # ✅ Teclado español
+country = "cl"                     # ✅ Chile
+fqdn = "proxmox.local"
+mailto = "elmostwanted82@gmail.com" # ✅ Tu email
+timezone = "America/Santiago"      # ✅ Tu zona horaria
 root_password = "Pve@2025!!"
-reboot_on_error = false      # 建议初次测试设为 false，方便查看报错
 
 [network]
-source = "from-dhcp"         # 如果改为 "from-answer"，则必须取消下方注释
-# address = "192.168.1.100/24" # 注意：工具较新版本倾向于使用 address 而非 cidr
-# gateway = "192.168.1.1"
-# dns = ["223.5.5.5", "114.114.114.114"] # 数组格式更稳妥
+source = "from-answer"             # ✅ IP estática (no DHCP)
+address = "192.168.1.134/24"       # ✅ Tu IP/máscara
+gateway = "192.168.1.1"            # ✅ Tu gateway
+dns = ["1.1.1.1"]                  # ✅ Tu DNS
 
 [disk-setup]
-filesystem = "ext4"
-disk_list = ["sda"]          # 确保目标磁盘确实是 sda，生产环境建议用序列号
-lvm.hdsize = 500
+filesystem = "ext4"                # ✅ Tu sistema de archivos
+disk_list = ["nvme0n1"]            # ✅ Tu disco NVMe
+lvm.maxroot = 60
 lvm.swapsize = 2
-lvm.maxroot = 60             # 根分区大小 (GB)
-lvm.minfree = 10             # 建议预留一点空间用于快照或 LVM 扩展
-lvm.maxvz = 0                # 设为 0 表示不创建 pve-data (适合全给 root)
