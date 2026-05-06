@@ -1,4 +1,3 @@
-name=pve-unattended.toml url=https://github.com/xonec/pve-auto-iso/blob/main/pve-unattended.toml
 [global]
 keyboard = "es"                    # ✅ Teclado español
 country = "cl"                     # ✅ Chile
