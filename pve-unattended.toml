@@ -8,7 +8,7 @@ root_password = "Pve@2025!!"
 
 [network]
 source = "from-answer"             # ✅ IP estática (no DHCP)
-address = "192.168.1.134/24"       # ✅ Tu IP/máscara
+cidr = "192.168.1.134/24"       # ✅ Tu IP/máscara
 gateway = "192.168.1.1"            # ✅ Tu gateway
 dns = ["1.1.1.1"]                  # ✅ Tu DNS
 
