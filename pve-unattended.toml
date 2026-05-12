@@ -1,22 +1,22 @@
 [global]
-keyboard = "es"                    # ✅ Teclado español
-country = "cl"                     # ✅ Chile
-fqdn = "proxmox.local"
-mailto = "elmostwanted82@gmail.com" # ✅ Tu email
-timezone = "America/Santiago"      # ✅ Tu zona horaria
+keyboard = "es"
+country = "cl"
+fqdn = "Proxmox.local"
+mailto = "e@gm.com"
+timezone = "America/Santiago"
 root_password = "Pve@2025!!"
 
 [network]
-source = "from-answer"             # ✅ IP estática (no DHCP)
-cidr = "192.168.1.134/24"       # ✅ Tu IP/máscara
-gateway = "192.168.1.1"            # ✅ Tu gateway
-dns = "1.1.1.1"                  # ✅ Tu DNS
+source = "from-answer"
+cidr = "192.168.1.134/24"
+gateway = "192.168.1.1"
+dns = "1.1.1.1"
 
 [network.filter]
 type = "nic0"
 
 [disk-setup]
-filesystem = "ext4"                # ✅ Tu sistema de archivos
-disk_list = ["nvme0n1"]           # ✅ Tu disco NVMe
+filesystem = "ext4"
+disk_list = ["nvme0n1"]
 lvm.maxroot = 60
 lvm.swapsize = 2
